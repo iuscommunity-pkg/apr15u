@@ -61,7 +61,7 @@ C data structures and routines.
 
 
 %prep
-%setup -q
+%setup -q -n %{real_name}-%{version}
 %patch2 -p1 -b .locktimeout
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .pkgconf
