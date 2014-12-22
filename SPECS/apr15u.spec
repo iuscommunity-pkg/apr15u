@@ -19,7 +19,7 @@ Release: 1.ius%{?dist}
 License: ASL 2.0 and BSD with advertising and ISC and BSD
 Group: System Environment/Libraries
 URL: http://apr.apache.org/
-Source0: http://www.apache.org/dist/apr/%{name}-%{version}.tar.bz2
+Source0: http://www.apache.org/dist/apr/%{real_name}-%{version}.tar.bz2
 Source1: apr-wrapper.h
 Patch2: apr-1.2.2-locktimeout.patch
 Patch3: apr-1.2.2-libdir.patch
