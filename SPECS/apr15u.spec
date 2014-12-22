@@ -1,12 +1,15 @@
+%global real_name apr
+%global ius_suffix 15u
+
 %define aprver 1
 
 # Arches on which the multilib apr.h hack is needed:
 %define multilib_arches %{ix86} ia64 ppc ppc64 s390 s390x x86_64
 
 Summary: Apache Portable Runtime library
-Name: apr
+Name: %{real_name}%{ius_suffix}
 Version: 1.5.1
-Release: 3%{?dist}
+Release: 1.ius%{?dist}
 # ASL 2.0: everything
 # ISC: network_io/apr-1.4.6/network_io/unix/inet_?to?.c
 # BSD with advertising: strings/apr_snprintf.c, strings/apr_fnmatch.c,
@@ -21,10 +24,17 @@ Source1: apr-wrapper.h
 Patch2: apr-1.2.2-locktimeout.patch
 Patch3: apr-1.2.2-libdir.patch
 Patch4: apr-1.2.7-pkgconf.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires: autoconf, libtool, libuuid-devel, python
+BuildRequires: autoconf
+BuildRequires: libtool
+BuildRequires: libuuid-devel
+BuildRequires: python
 # To enable SCTP support
 BuildRequires: lksctp-tools-devel
+
+Provides: %{real_name} = %{version}-%{release}
+Provides: %{real_name}%{?_isa} = %{version}-%{release}
+Conflicts: %{real_name} < %{version}
+
 
 %description
 The mission of the Apache Portable Runtime (APR) is to provide a
@@ -32,11 +42,16 @@ free library of C data structures and routines, forming a system
 portability layer to as many operating systems as possible,
 including Unices, MS Win32, BeOS and OS/2.
 
+
 %package devel
 Group: Development/Libraries
 Summary: APR library development kit
 Conflicts: subversion-devel < 0.20.1-2
 Requires: apr = %{version}-%{release}, pkgconfig
+Provides: %{real_name}-devel = %{version}-%{release}
+Provides: %{real_name}-devel%{?_isa} = %{version}-%{release}
+Conflicts: %{real_name}-devel < %{version}
+
 
 %description devel
 This package provides the support files which can be used to 
@@ -44,11 +59,13 @@ build applications using the APR library.  The mission of the
 Apache Portable Runtime (APR) is to provide a free library of 
 C data structures and routines.
 
+
 %prep
 %setup -q
 %patch2 -p1 -b .locktimeout
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .pkgconf
+
 
 %build
 # regenerate configure script etc.
@@ -64,8 +81,8 @@ export ac_cv_search_shm_open=no
         --with-devrandom=/dev/urandom
 make %{?_smp_mflags}
 
+
 %install
-rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/aclocal
@@ -91,6 +108,7 @@ install -c -m644 %{SOURCE1} $RPM_BUILD_ROOT%{_includedir}/apr-%{aprver}/apr.h
 rm -f $RPM_BUILD_ROOT%{_libdir}/apr.exp \
       $RPM_BUILD_ROOT%{_libdir}/libapr-*.a
 
+
 %check
 # Fail if LFS support isn't present in a 32-bit build, since this
 # breaks ABI and the soname doesn't change: see #254241
@@ -101,20 +119,19 @@ if grep 'define SIZEOF_VOIDP 4' include/apr.h \
   exit 1
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %post -p /sbin/ldconfig
 
+
 %postun -p /sbin/ldconfig
 
+
 %files
-%defattr(-,root,root,-)
 %doc CHANGES LICENSE NOTICE
 %{_libdir}/libapr-%{aprver}.so.*
 
+
 %files devel
-%defattr(-,root,root,-)
 %doc docs/APRDesign.html docs/canonical_filenames.html
 %doc docs/incomplete_types docs/non_apr_programs
 %{_bindir}/apr-%{aprver}-config
@@ -128,7 +145,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/apr-%{aprver}/*.h
 %{_datadir}/aclocal/*.m4
 
+
 %changelog
+* Mon Dec 22 2014 Carl George <carl.george@rackspace.com> - 1.5.1-1.ius
+- Initial port to IUS
+
 * Fri Aug 15 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.5.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
