@@ -9,7 +9,7 @@
 Summary: Apache Portable Runtime library
 Name: %{real_name}%{ius_suffix}
 Version: 1.5.1
-Release: 1.ius%{?dist}
+Release: 2.ius%{?dist}
 # ASL 2.0: everything
 # ISC: network_io/apr-1.4.6/network_io/unix/inet_?to?.c
 # BSD with advertising: strings/apr_snprintf.c, strings/apr_fnmatch.c,
@@ -30,9 +30,6 @@ BuildRequires: libuuid-devel
 BuildRequires: python
 # To enable SCTP support
 BuildRequires: lksctp-tools-devel
-
-Provides: %{real_name} = %{version}-%{release}
-Provides: %{real_name}%{?_isa} = %{version}-%{release}
 Conflicts: %{real_name} < %{version}
 
 
@@ -47,10 +44,8 @@ including Unices, MS Win32, BeOS and OS/2.
 Group: Development/Libraries
 Summary: APR library development kit
 Conflicts: subversion-devel < 0.20.1-2
-Requires: apr = %{version}-%{release}, pkgconfig
-Provides: %{real_name}-devel = %{version}-%{release}
-Provides: %{real_name}-devel%{?_isa} = %{version}-%{release}
 Conflicts: %{real_name}-devel < %{version}
+Requires: %{name} = %{version}-%{release}, pkgconfig
 
 
 %description devel
@@ -147,6 +142,9 @@ fi
 
 
 %changelog
+* Thu Jan 08 2015 Carl George <carl.george@rackspace.com> - 1.5.1-2.ius
+- Remove provides to correct dependency resolution
+
 * Mon Dec 22 2014 Carl George <carl.george@rackspace.com> - 1.5.1-1.ius
 - Initial port to IUS
 
