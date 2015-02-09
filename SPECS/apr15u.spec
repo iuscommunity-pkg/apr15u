@@ -1,5 +1,6 @@
 %global real_name apr
 %global ius_suffix 15u
+%global apr apr%{ius_suffix}
 
 %define aprver 1
 
@@ -7,7 +8,7 @@
 %define multilib_arches %{ix86} ia64 ppc ppc64 s390 s390x x86_64
 
 Summary: Apache Portable Runtime library
-Name: %{real_name}%{ius_suffix}
+Name: %{apr}
 Version: 1.5.1
 Release: 3.ius%{?dist}
 # ASL 2.0: everything
@@ -44,7 +45,7 @@ including Unices, MS Win32, BeOS and OS/2.
 Group: Development/Libraries
 Summary: APR library development kit
 Conflicts: subversion-devel < 0.20.1-2
-Requires: %{name} = %{version}-%{release}, pkgconfig
+Requires: %{apr} = %{version}-%{release}, pkgconfig
 
 
 %description devel
@@ -71,8 +72,8 @@ C data structures and routines.
 export ac_cv_search_shm_open=no
 
 %configure \
-        --includedir=%{_includedir}/%{name}-%{aprver} \
-        --with-installbuilddir=%{_libdir}/%{name}-%{aprver}/build \
+        --includedir=%{_includedir}/%{apr}-%{aprver} \
+        --with-installbuilddir=%{_libdir}/%{apr}-%{aprver}/build \
         --with-devrandom=/dev/urandom
 make %{?_smp_mflags}
 
@@ -81,22 +82,22 @@ make %{?_smp_mflags}
 make install DESTDIR=$RPM_BUILD_ROOT
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/aclocal
-install -m 644 build/find_apr.m4 $RPM_BUILD_ROOT/%{_datadir}/aclocal/find_%{name}.m4
+install -m 644 build/find_apr.m4 $RPM_BUILD_ROOT/%{_datadir}/aclocal/find_%{apr}_apr.m4
 
 # Trim exported dependecies
 sed -ri '/^dependency_libs/{s,-l(uuid|crypt) ,,g}' \
       $RPM_BUILD_ROOT%{_libdir}/libapr*.la
 sed -ri '/^LIBS=/{s,-l(uuid|crypt) ,,g;s/  */ /g}' \
-      $RPM_BUILD_ROOT%{_bindir}/%{name}-%{aprver}-config
+      $RPM_BUILD_ROOT%{_bindir}/%{apr}-%{aprver}-config
 sed -ri '/^Libs/{s,-l(uuid|crypt) ,,g}' \
-      $RPM_BUILD_ROOT%{_libdir}/pkgconfig/%{name}-%{aprver}.pc
+      $RPM_BUILD_ROOT%{_libdir}/pkgconfig/%{apr}-%{aprver}.pc
 
 %ifarch %{multilib_arches}
 # Ugly hack to allow parallel installation of 32-bit and 64-bit apr-devel 
 # packages:
-mv $RPM_BUILD_ROOT%{_includedir}/%{name}-%{aprver}/apr.h \
-   $RPM_BUILD_ROOT%{_includedir}/%{name}-%{aprver}/apr-%{_arch}.h
-install -c -m644 %{SOURCE1} $RPM_BUILD_ROOT%{_includedir}/%{name}-%{aprver}/apr.h
+mv $RPM_BUILD_ROOT%{_includedir}/%{apr}-%{aprver}/apr.h \
+   $RPM_BUILD_ROOT%{_includedir}/%{apr}-%{aprver}/apr-%{_arch}.h
+install -c -m644 %{SOURCE1} $RPM_BUILD_ROOT%{_includedir}/%{apr}-%{aprver}/apr.h
 %endif
 
 # Unpackaged files:
@@ -123,21 +124,21 @@ fi
 
 %files
 %doc CHANGES LICENSE NOTICE
-%{_libdir}/lib%{name}-%{aprver}.so.*
+%{_libdir}/lib%{apr}-%{aprver}.so.*
 
 
 %files devel
 %doc docs/APRDesign.html docs/canonical_filenames.html
 %doc docs/incomplete_types docs/non_apr_programs
-%{_bindir}/%{name}-%{aprver}-config
-%{_libdir}/lib%{name}-%{aprver}.*a
-%{_libdir}/lib%{name}-%{aprver}.so
+%{_bindir}/%{apr}-%{aprver}-config
+%{_libdir}/lib%{apr}-%{aprver}.*a
+%{_libdir}/lib%{apr}-%{aprver}.so
 %{_libdir}/pkgconfig/*.pc
-%dir %{_libdir}/%{name}-%{aprver}
-%dir %{_libdir}/%{name}-%{aprver}/build
-%{_libdir}/%{name}-%{aprver}/build/*
-%dir %{_includedir}/%{name}-%{aprver}
-%{_includedir}/%{name}-%{aprver}/*.h
+%dir %{_libdir}/%{apr}-%{aprver}
+%dir %{_libdir}/%{apr}-%{aprver}/build
+%{_libdir}/%{apr}-%{aprver}/build/*
+%dir %{_includedir}/%{apr}-%{aprver}
+%{_includedir}/%{apr}-%{aprver}/*.h
 %{_datadir}/aclocal/*.m4
 
 
