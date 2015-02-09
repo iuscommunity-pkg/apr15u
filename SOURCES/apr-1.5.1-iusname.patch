@@ -1,6 +1,6 @@
 diff -Naur a/apr-config.in b/apr-config.in
 --- a/apr-config.in	2008-06-20 10:46:02.000000000 -0500
-+++ b/apr-config.in	2015-02-09 11:37:22.447062730 -0600
++++ b/apr-config.in	2015-02-09 16:13:44.879082859 -0600
 @@ -51,7 +51,7 @@
  show_usage()
  {
@@ -22,9 +22,20 @@ diff -Naur a/apr-config.in b/apr-config.in
  
  An application should use the results of --cflags, --cppflags, --includes,
  and --ldflags in their build process.
+diff -Naur a/build/pkg/pkginfo.in b/build/pkg/pkginfo.in
+--- a/build/pkg/pkginfo.in	2005-01-06 14:27:26.000000000 -0600
++++ b/build/pkg/pkginfo.in	2015-02-09 16:25:23.052399074 -0600
+@@ -1,5 +1,5 @@
+-PKG="ASFapr-1"
+-NAME="apr"
++PKG="ASFapr15u-1"
++NAME="apr15u"
+ ARCH="@target_cpu@"
+ VERSION="@APR_DOTTED_VERSION@"
+ CATEGORY="application"
 diff -Naur a/configure.in b/configure.in
 --- a/configure.in	2014-01-25 09:17:29.000000000 -0600
-+++ b/configure.in	2015-02-09 11:37:57.455282305 -0600
++++ b/configure.in	2015-02-09 16:13:44.882082791 -0600
 @@ -222,7 +222,7 @@
  APR_EBCDIC
  
@@ -54,7 +65,7 @@ diff -Naur a/configure.in b/configure.in
  dnl references must be backslash-escaped as necessary.
 diff -Naur a/libapr.rc b/libapr.rc
 --- a/libapr.rc	2013-05-26 19:24:48.000000000 -0500
-+++ b/libapr.rc	2015-02-09 10:42:42.728773501 -0600
++++ b/libapr.rc	2015-02-09 16:13:44.883082769 -0600
 @@ -14,7 +14,7 @@
    "See the License for the specific language governing permissions and " \
    "limitations under the License."
@@ -66,7 +77,7 @@ diff -Naur a/libapr.rc b/libapr.rc
  1 VERSIONINFO
 diff -Naur a/Makefile.in b/Makefile.in
 --- a/Makefile.in	2014-03-17 10:10:26.000000000 -0500
-+++ b/Makefile.in	2015-02-09 11:14:10.533405108 -0600
++++ b/Makefile.in	2015-02-09 16:13:44.884082746 -0600
 @@ -27,8 +27,8 @@
  INSTALL_SUBDIRS=@INSTALL_SUBDIRS@
  
