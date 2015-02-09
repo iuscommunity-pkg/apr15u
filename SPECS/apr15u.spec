@@ -9,7 +9,7 @@
 Summary: Apache Portable Runtime library
 Name: %{real_name}%{ius_suffix}
 Version: 1.5.1
-Release: 2.ius%{?dist}
+Release: 3.ius%{?dist}
 # ASL 2.0: everything
 # ISC: network_io/apr-1.4.6/network_io/unix/inet_?to?.c
 # BSD with advertising: strings/apr_snprintf.c, strings/apr_fnmatch.c,
@@ -24,13 +24,13 @@ Source1: apr-wrapper.h
 Patch2: apr-1.2.2-locktimeout.patch
 Patch3: apr-1.2.2-libdir.patch
 Patch4: apr-1.2.7-pkgconf.patch
+Patch5: apr-1.5.1-iusname.patch
 BuildRequires: autoconf
 BuildRequires: libtool
 BuildRequires: libuuid-devel
 BuildRequires: python
 # To enable SCTP support
 BuildRequires: lksctp-tools-devel
-Conflicts: %{real_name} < %{version}
 
 
 %description
@@ -44,7 +44,6 @@ including Unices, MS Win32, BeOS and OS/2.
 Group: Development/Libraries
 Summary: APR library development kit
 Conflicts: subversion-devel < 0.20.1-2
-Conflicts: %{real_name}-devel < %{version}
 Requires: %{name} = %{version}-%{release}, pkgconfig
 
 
@@ -60,6 +59,7 @@ C data structures and routines.
 %patch2 -p1 -b .locktimeout
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .pkgconf
+%patch5 -p1 -b .iusname
 
 
 %build
@@ -71,8 +71,8 @@ C data structures and routines.
 export ac_cv_search_shm_open=no
 
 %configure \
-        --includedir=%{_includedir}/apr-%{aprver} \
-        --with-installbuilddir=%{_libdir}/apr-%{aprver}/build \
+        --includedir=%{_includedir}/%{name}-%{aprver} \
+        --with-installbuilddir=%{_libdir}/%{name}-%{aprver}/build \
         --with-devrandom=/dev/urandom
 make %{?_smp_mflags}
 
@@ -81,22 +81,22 @@ make %{?_smp_mflags}
 make install DESTDIR=$RPM_BUILD_ROOT
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/aclocal
-install -m 644 build/find_apr.m4 $RPM_BUILD_ROOT/%{_datadir}/aclocal
+install -m 644 build/find_apr.m4 $RPM_BUILD_ROOT/%{_datadir}/aclocal/find_%{name}.m4
 
 # Trim exported dependecies
 sed -ri '/^dependency_libs/{s,-l(uuid|crypt) ,,g}' \
       $RPM_BUILD_ROOT%{_libdir}/libapr*.la
 sed -ri '/^LIBS=/{s,-l(uuid|crypt) ,,g;s/  */ /g}' \
-      $RPM_BUILD_ROOT%{_bindir}/apr-%{aprver}-config
+      $RPM_BUILD_ROOT%{_bindir}/%{name}-%{aprver}-config
 sed -ri '/^Libs/{s,-l(uuid|crypt) ,,g}' \
-      $RPM_BUILD_ROOT%{_libdir}/pkgconfig/apr-%{aprver}.pc
+      $RPM_BUILD_ROOT%{_libdir}/pkgconfig/%{name}-%{aprver}.pc
 
 %ifarch %{multilib_arches}
 # Ugly hack to allow parallel installation of 32-bit and 64-bit apr-devel 
 # packages:
-mv $RPM_BUILD_ROOT%{_includedir}/apr-%{aprver}/apr.h \
-   $RPM_BUILD_ROOT%{_includedir}/apr-%{aprver}/apr-%{_arch}.h
-install -c -m644 %{SOURCE1} $RPM_BUILD_ROOT%{_includedir}/apr-%{aprver}/apr.h
+mv $RPM_BUILD_ROOT%{_includedir}/%{name}-%{aprver}/apr.h \
+   $RPM_BUILD_ROOT%{_includedir}/%{name}-%{aprver}/apr-%{_arch}.h
+install -c -m644 %{SOURCE1} $RPM_BUILD_ROOT%{_includedir}/%{name}-%{aprver}/apr.h
 %endif
 
 # Unpackaged files:
@@ -123,25 +123,29 @@ fi
 
 %files
 %doc CHANGES LICENSE NOTICE
-%{_libdir}/libapr-%{aprver}.so.*
+%{_libdir}/lib%{name}-%{aprver}.so.*
 
 
 %files devel
 %doc docs/APRDesign.html docs/canonical_filenames.html
 %doc docs/incomplete_types docs/non_apr_programs
-%{_bindir}/apr-%{aprver}-config
-%{_libdir}/libapr-%{aprver}.*a
-%{_libdir}/libapr-%{aprver}.so
+%{_bindir}/%{name}-%{aprver}-config
+%{_libdir}/lib%{name}-%{aprver}.*a
+%{_libdir}/lib%{name}-%{aprver}.so
 %{_libdir}/pkgconfig/*.pc
-%dir %{_libdir}/apr-%{aprver}
-%dir %{_libdir}/apr-%{aprver}/build
-%{_libdir}/apr-%{aprver}/build/*
-%dir %{_includedir}/apr-%{aprver}
-%{_includedir}/apr-%{aprver}/*.h
+%dir %{_libdir}/%{name}-%{aprver}
+%dir %{_libdir}/%{name}-%{aprver}/build
+%{_libdir}/%{name}-%{aprver}/build/*
+%dir %{_includedir}/%{name}-%{aprver}
+%{_includedir}/%{name}-%{aprver}/*.h
 %{_datadir}/aclocal/*.m4
 
 
 %changelog
+* Mon Feb 09 2015 Carl George <carl.george@rackspace.com> - 1.5.1-3.ius
+- Add patch5 to rename all the things
+- Remove conflicts to allow parallel install with stock apr
+
 * Thu Jan 08 2015 Carl George <carl.george@rackspace.com> - 1.5.1-2.ius
 - Remove provides to correct dependency resolution
 

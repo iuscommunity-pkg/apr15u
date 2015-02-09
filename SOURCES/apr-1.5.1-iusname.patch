@@ -1,0 +1,80 @@
+diff -Naur a/apr-config.in b/apr-config.in
+--- a/apr-config.in	2008-06-20 10:46:02.000000000 -0500
++++ b/apr-config.in	2015-02-09 11:37:22.447062730 -0600
+@@ -51,7 +51,7 @@
+ show_usage()
+ {
+     cat << EOF
+-Usage: apr-$APR_MAJOR_VERSION-config [OPTION]
++Usage: apr15u-$APR_MAJOR_VERSION-config [OPTION]
+ 
+ Known values for OPTION are:
+   --prefix[=DIR]    change prefix to DIR
+@@ -77,9 +77,9 @@
+   --help            print this help
+ 
+ When linking with libtool, an application should do something like:
+-  APR_LIBS="\`apr-$APR_MAJOR_VERSION-config --link-libtool --libs\`"
++  APR_LIBS="\`apr15u-$APR_MAJOR_VERSION-config --link-libtool --libs\`"
+ or when linking directly:
+-  APR_LIBS="\`apr-$APR_MAJOR_VERSION-config --link-ld --libs\`"
++  APR_LIBS="\`apr15u-$APR_MAJOR_VERSION-config --link-ld --libs\`"
+ 
+ An application should use the results of --cflags, --cppflags, --includes,
+ and --ldflags in their build process.
+diff -Naur a/configure.in b/configure.in
+--- a/configure.in	2014-01-25 09:17:29.000000000 -0600
++++ b/configure.in	2015-02-09 11:37:57.455282305 -0600
+@@ -222,7 +222,7 @@
+ APR_EBCDIC
+ 
+ dnl this is our library name
+-APR_LIBNAME="apr${libsuffix}"
++APR_LIBNAME="apr15u${libsuffix}"
+ AC_SUBST(APR_LIBNAME)
+ 
+ dnl prep libtool
+@@ -2798,7 +2798,7 @@
+                  include/apr.h
+                  build/apr_rules.mk
+                  build/pkg/pkginfo
+-                 apr-$APR_MAJOR_VERSION-config:apr-config.in
++                 apr15u-$APR_MAJOR_VERSION-config:apr-config.in
+                  apr.pc])
+ 
+ if test -d $srcdir/test; then
+@@ -2817,7 +2817,7 @@
+   fi
+   rm -f $i.save
+ done
+-chmod +x apr-$APR_MAJOR_VERSION-config
++chmod +x apr15u-$APR_MAJOR_VERSION-config
+ ],[
+ dnl This section is expanded by configure UNQUOTED so variable 
+ dnl references must be backslash-escaped as necessary.
+diff -Naur a/libapr.rc b/libapr.rc
+--- a/libapr.rc	2013-05-26 19:24:48.000000000 -0500
++++ b/libapr.rc	2015-02-09 10:42:42.728773501 -0600
+@@ -14,7 +14,7 @@
+   "See the License for the specific language governing permissions and " \
+   "limitations under the License."
+ 
+-#define APR_DLL_BASENAME "libapr-" APR_STRINGIFY(APR_MAJOR_VERSION)
++#define APR_DLL_BASENAME "libapr15u-" APR_STRINGIFY(APR_MAJOR_VERSION)
+ 
+ 
+ 1 VERSIONINFO
+diff -Naur a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2014-03-17 10:10:26.000000000 -0500
++++ b/Makefile.in	2015-02-09 11:14:10.533405108 -0600
+@@ -27,8 +27,8 @@
+ INSTALL_SUBDIRS=@INSTALL_SUBDIRS@
+ 
+ TARGET_LIB = lib@APR_LIBNAME@.la
+-APR_PCFILE = apr-$(APR_MAJOR_VERSION).pc
+-APR_CONFIG = apr-$(APR_MAJOR_VERSION)-config
++APR_PCFILE = apr15u-$(APR_MAJOR_VERSION).pc
++APR_CONFIG = apr15u-$(APR_MAJOR_VERSION)-config
+ INSTALL = @INSTALL@
+ INSTALL_DATA = @INSTALL_DATA@
+ 
