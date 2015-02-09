@@ -82,7 +82,7 @@ make %{?_smp_mflags}
 make install DESTDIR=$RPM_BUILD_ROOT
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/aclocal
-install -m 644 build/find_apr.m4 $RPM_BUILD_ROOT/%{_datadir}/aclocal/find_%{apr}_apr.m4
+install -m 644 build/find_apr.m4 $RPM_BUILD_ROOT/%{_datadir}/aclocal/find_%{apr}.m4
 
 # Trim exported dependecies
 sed -ri '/^dependency_libs/{s,-l(uuid|crypt) ,,g}' \
