@@ -102,7 +102,7 @@ install -c -m644 %{SOURCE1} $RPM_BUILD_ROOT%{_includedir}/%{apr}-%{aprver}/apr.h
 
 # Unpackaged files:
 rm -f $RPM_BUILD_ROOT%{_libdir}/apr.exp \
-      $RPM_BUILD_ROOT%{_libdir}/libapr-*.a
+      $RPM_BUILD_ROOT%{_libdir}/lib%{apr}-*.a
 
 
 %check
