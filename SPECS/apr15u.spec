@@ -9,8 +9,8 @@
 
 Summary: Apache Portable Runtime library
 Name: %{apr}
-Version: 1.5.1
-Release: 3.ius%{?dist}
+Version: 1.5.2
+Release: 1.ius%{?dist}
 # ASL 2.0: everything
 # ISC: network_io/apr-1.4.6/network_io/unix/inet_?to?.c
 # BSD with advertising: strings/apr_snprintf.c, strings/apr_fnmatch.c,
@@ -143,6 +143,9 @@ fi
 
 
 %changelog
+* Wed Apr 29 2015 Carl George <carl.george@rackspace.com> - 1.5.2-1.ius
+- Latest upstream
+
 * Mon Feb 09 2015 Carl George <carl.george@rackspace.com> - 1.5.1-3.ius
 - Add patch5 to rename all the things
 - Remove conflicts to allow parallel install with stock apr
